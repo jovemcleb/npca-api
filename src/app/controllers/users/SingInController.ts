@@ -2,18 +2,18 @@ import { FastifyRequest } from "fastify";
 import { InvalidCredentials } from "../../errors/InvalidCredentials";
 import { Controller } from "../../types/Controller";
 import { SignInInput } from "../../types/User";
-import { UserUseCases } from "../../useCases/UserUseCases";
+import { SignInUseCase } from "../../useCases/user/SignInUseCase";
 
 export class SignInController
   implements Controller<{ Body: { email: string; password: string } }>
 {
-  constructor(private readonly userUseCases: UserUseCases) {}
+  constructor(private readonly signInUseCase: SignInUseCase) {}
 
   public async handle(request: FastifyRequest<{ Body: SignInInput }>) {
     try {
       const { email, password } = request.body;
 
-      const { token } = await this.userUseCases.signIn({ email, password });
+      const { token } = await this.signInUseCase.execute({ email, password });
 
       return { statusCode: 200, body: { token } };
     } catch (error) {

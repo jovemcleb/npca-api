@@ -12,7 +12,7 @@ export const userRoutes: FastifyPluginAsync = async (
   fastify.post(
     "/signup",
     { schema: signUpSchema },
-    routeAdapter(makeSignUpController(fastify))
+    routeAdapter(makeSignUpController())
   );
 
   fastify.post(

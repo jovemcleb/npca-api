@@ -2,16 +2,16 @@ import { FastifyRequest } from "fastify";
 import { AccountAlreadyExists } from "../../errors/AccountAlreadyExists";
 import { Controller } from "../../types/Controller";
 import { SignUpInput } from "../../types/User";
-import { UserUseCases } from "../../useCases/UserUseCases";
+import { SignUpUseCase } from "../../useCases/user/SignUpUseCase";
 
 export class SignUpController implements Controller<{ Body: SignUpInput }> {
-  constructor(private readonly userUseCases: UserUseCases) {}
+  constructor(private readonly signUpUseCase: SignUpUseCase) {}
 
   public async handle(request: FastifyRequest<{ Body: SignUpInput }>) {
     try {
       const { name, email, password, institution, course } = request.body;
 
-      const user = await this.userUseCases.signUp({
+      const user = await this.signUpUseCase.execute({
         name,
         email,
         password,

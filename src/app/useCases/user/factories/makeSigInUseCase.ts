@@ -1,11 +1,11 @@
 import { FastifyInstance } from "fastify";
 import { makeUserRepository } from "../../../../infra/repositories/factories/makeUserRepository";
 import { JwtAdapter } from "../../../../main/adapters/JwtAdapter";
-import { UserUseCases } from "../../UserUseCases";
+import { SignInUseCase } from "../SignInUseCase";
 
-export function makeUserUseCase(fastify: FastifyInstance) {
+export function makeSignInUseCase(fastify: FastifyInstance) {
   const userRepository = makeUserRepository();
   const jwtAdapter = new JwtAdapter(fastify);
 
-  return new UserUseCases(userRepository, jwtAdapter);
+  return new SignInUseCase(userRepository, jwtAdapter);
 }

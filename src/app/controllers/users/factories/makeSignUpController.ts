@@ -1,9 +1,8 @@
-import { FastifyInstance } from "fastify";
-import { makeUserUseCase } from "../../../useCases/factories/makeUserUseCase";
+import { makeSignUpUseCase } from "../../../useCases/user/factories/makeSignUpUseCase";
 import { SignUpController } from "../SignUpController";
 
-export function makeSignUpController(fastify: FastifyInstance) {
-  const userUseCases = makeUserUseCase(fastify);
+export function makeSignUpController() {
+  const signUpUseCase = makeSignUpUseCase();
 
-  return new SignUpController(userUseCases);
+  return new SignUpController(signUpUseCase);
 }
