@@ -5,8 +5,8 @@ export type Response = {
   body: Record<string, any>;
 };
 
-export type Controller<
+export abstract class Controller<
   TRoute extends RouteGenericInterface = RouteGenericInterface
-> = {
-  handle: (request: FastifyRequest<TRoute>) => Promise<Response>;
-};
+> {
+  abstract handle(request: FastifyRequest<TRoute>): Promise<Response>;
+}

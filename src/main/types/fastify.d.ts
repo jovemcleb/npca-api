@@ -1,7 +1,7 @@
 import "@fastify/jwt";
 import "fastify";
 import mongoose from "mongoose";
-import { UserRole } from "../../app/models/User";
+import { UserRole } from "../../infra/models/User";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -14,13 +14,13 @@ declare module "@fastify/jwt" {
     payload: {
       account: {
         id: string;
-        role: UserRole;
+        role: UserRole[];
       };
     };
     user: {
       account: {
         id: string;
-        role: UserRole;
+        role: UserRole[];
       };
       iat: number;
       exp: number;
