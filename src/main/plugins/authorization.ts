@@ -19,7 +19,11 @@ const authorization: FastifyPluginAsync = async (fastify: FastifyInstance) => {
 
       const userRole = request.user.account.role;
 
-      if (!allowedRoles.includes(userRole)) {
+      const hasAccess = Array.isArray(userRole)
+        ? allowedRoles.some((r) => userRole.includes(r))
+        : allowedRoles.includes(userRole);
+
+      if (!hasAccess) {
         return reply.status(403).send({
           statusCode: 403,
           body: { error: "Acesso negado" },
