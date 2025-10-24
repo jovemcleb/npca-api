@@ -1,13 +1,13 @@
 import { FastifyRequest } from "fastify";
-import { SignUpBody } from "../../../main/schemas/signUpSchema";
 import { AccountAlreadyExists } from "../../errors/AccountAlreadyExists";
 import { Controller } from "../../types/Controller";
+import { SignUpInput } from "../../types/User";
 import { UserUseCases } from "../../useCases/UserUseCases";
 
-export class SignUpController implements Controller<{ Body: SignUpBody }> {
+export class SignUpController implements Controller<{ Body: SignUpInput }> {
   constructor(private readonly userUseCases: UserUseCases) {}
 
-  public async handle(request: FastifyRequest<{ Body: SignUpBody }>) {
+  public async handle(request: FastifyRequest<{ Body: SignUpInput }>) {
     try {
       const { name, email, password, institution, course } = request.body;
 
@@ -26,6 +26,8 @@ export class SignUpController implements Controller<{ Body: SignUpBody }> {
         },
       };
     } catch (error) {
+      console.log(error);
+
       if (error instanceof AccountAlreadyExists) {
         return {
           statusCode: 409,

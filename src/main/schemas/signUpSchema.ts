@@ -8,8 +8,6 @@ const signUpBodySchema = z.object({
   course: z.string().min(1, "O curso é obrigatório"),
 });
 
-export type SignUpBody = z.infer<typeof signUpBodySchema>;
-
 export const signUpSchema = {
   tags: ["Users"],
   summary: "/SignUp",
