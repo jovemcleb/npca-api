@@ -4,6 +4,7 @@ import {
   prop,
   ReturnModelType,
 } from "@typegoose/typegoose";
+import { WhatIsIt } from "@typegoose/typegoose/lib/internal/constants";
 
 export enum UserRole {
   ADMIN = "admin",
@@ -36,13 +37,16 @@ export class User {
   @prop({ required: false, type: () => Array })
   public projects?: { title: string; description?: string }[];
 
-  @prop({
-    required: true,
-    default: UserRole.STUDENT,
-    enum: UserRole,
-    type: () => String,
-  })
-  public role!: UserRole;
+  @prop(
+    {
+      required: true,
+      default: [UserRole.STUDENT],
+      type: String,
+      enum: Object.values(UserRole),
+    },
+    WhatIsIt.ARRAY
+  )
+  public roles!: UserRole[];
 }
 
 export const UserModel = getModelForClass(User);
