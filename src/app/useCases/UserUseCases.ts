@@ -3,7 +3,7 @@ import { UserRepository } from "../../infra/repositories/UserRepository";
 import { JwtAdapter } from "../../main/adapters/JwtAdapter";
 import { AccountAlreadyExists } from "../errors/AccountAlreadyExists";
 import { InvalidCredentials } from "../errors/InvalidCredentials";
-import { ICreateUser, SignInInput } from "../types/User";
+import { SignInInput, SignUpInput } from "../types/User";
 
 export class UserUseCases {
   constructor(
@@ -14,7 +14,7 @@ export class UserUseCases {
   public async signIn(credentials: SignInInput) {
     const { email, password } = credentials;
 
-    const user = await this.userRepository.findOne({ email });
+    const user = await this.userRepository.findOneWithPassword({ email });
 
     if (!user) {
       throw new InvalidCredentials();
@@ -27,14 +27,14 @@ export class UserUseCases {
     }
 
     const token = this.jwtAdapter.sign(
-      { account: { id: user.id, role: user.role } },
+      { account: { id: user.id, role: user.roles } },
       { expiresIn: "1d" }
     );
 
     return { token };
   }
 
-  public async signUp(user: ICreateUser) {
+  public async signUp(user: SignUpInput) {
     const { name, email, password, institution, course } = user;
 
     const userExists = await this.userRepository.findOne({ email });
