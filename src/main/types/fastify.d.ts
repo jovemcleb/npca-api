@@ -6,6 +6,13 @@ import { UserRole } from "../../infra/models/User";
 declare module "fastify" {
   interface FastifyInstance {
     mongoose: typeof mongoose;
+    authenticate: (
+      request: FastifyRequest,
+      reply: FastifyReply
+    ) => Promise<void>;
+    authorize: (
+      allowedRoles: UserRole[]
+    ) => (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
   }
 }
 

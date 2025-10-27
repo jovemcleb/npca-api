@@ -10,3 +10,4 @@ export function routeAdapter<TRoute extends RouteGenericInterface>(
     return reply.status(statusCode).send(body);
   };
 }
+
