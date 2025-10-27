@@ -1,5 +1,5 @@
 import { FilterQuery } from "mongoose";
-import { SignUpInput } from "../../app/types/User";
+import { SignUpInput } from "../../main/schemas/signUpSchema";
 import { UserDocument, UserModel, UserModelType } from "../models/User";
 
 export class UserRepository {
@@ -29,5 +29,23 @@ export class UserRepository {
     });
 
     return { id };
+  }
+
+  public async updateUser(id: string, updateData: Partial<SignUpInput>) {
+    const user = await this.userModel
+      .findOneAndUpdate({ _id: id }, updateData, { new: true })
+      .lean({ virtuals: true })
+      .exec();
+
+    return { user };
+  }
+
+  public async deleteUser(id: string) {
+    const user = await this.userModel
+      .findOneAndDelete({ _id: id })
+      .lean({ virtuals: true })
+      .exec();
+
+    return { user };
   }
 }

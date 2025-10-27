@@ -1,13 +1,15 @@
 import z from "zod";
 
 const signInBodySchema = z.object({
-  email: z.email(),
-  password: z.string().min(4),
+  email: z.email("Email inválido"),
+  password: z.string().min(4, "A senha deve ter no mínimo 4 caracteres"),
 });
+
+export type SignInInput = z.infer<typeof signInBodySchema>;
 
 export const signInSchema = {
   tags: ["Users"],
-  summary: "/SignIn",
+  summary: "/signin",
   description: "Autenticação de usuário",
   body: signInBodySchema,
   response: {

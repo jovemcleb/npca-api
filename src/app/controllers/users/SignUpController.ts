@@ -1,7 +1,7 @@
 import { FastifyRequest } from "fastify";
+import { SignUpInput } from "../../../main/schemas/signUpSchema";
 import { AccountAlreadyExists } from "../../errors/AccountAlreadyExists";
 import { Controller } from "../../types/Controller";
-import { SignUpInput } from "../../types/User";
 import { SignUpUseCase } from "../../useCases/user/SignUpUseCase";
 
 export class SignUpController implements Controller<{ Body: SignUpInput }> {
@@ -9,7 +9,16 @@ export class SignUpController implements Controller<{ Body: SignUpInput }> {
 
   public async handle(request: FastifyRequest<{ Body: SignUpInput }>) {
     try {
-      const { name, email, password, institution, course } = request.body;
+      const { 
+        name, 
+        email, 
+        password, 
+        institution, 
+        course,
+        description,
+        articles,
+        projects 
+      } = request.body;
 
       const user = await this.signUpUseCase.execute({
         name,
@@ -17,6 +26,9 @@ export class SignUpController implements Controller<{ Body: SignUpInput }> {
         password,
         institution,
         course,
+        description,
+        articles,
+        projects,
       });
 
       return {
@@ -40,8 +52,7 @@ export class SignUpController implements Controller<{ Body: SignUpInput }> {
       return {
         statusCode: 500,
         body: {
-          error:
-            error instanceof Error ? error.message : "Internal server error",
+          error,
         },
       };
     }

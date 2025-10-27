@@ -1,13 +1,22 @@
 import { hash } from "argon2";
 import { UserRepository } from "../../../infra/repositories/UserRepository";
+import { SignUpInput } from "../../../main/schemas/signUpSchema";
 import { AccountAlreadyExists } from "../../errors/AccountAlreadyExists";
-import { SignUpInput } from "../../types/User";
 
 export class SignUpUseCase {
   constructor(private userRepository: UserRepository) {}
 
   public async execute(user: SignUpInput) {
-    const { name, email, password, institution, course } = user;
+    const { 
+      name, 
+      email, 
+      password, 
+      institution, 
+      course,
+      description,
+      articles,
+      projects 
+    } = user;
 
     const userExists = await this.userRepository.findOne({ email });
 
@@ -25,6 +34,9 @@ export class SignUpUseCase {
       password: hashedPassword,
       institution,
       course,
+      ...(description && { description }),
+      ...(articles && { articles }),
+      ...(projects && { projects }),
     });
 
     return newUser;

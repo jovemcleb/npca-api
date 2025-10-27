@@ -1,12 +1,10 @@
 import { FastifyRequest } from "fastify";
+import { SignInInput } from "../../../main/schemas/signInSchema";
 import { InvalidCredentials } from "../../errors/InvalidCredentials";
 import { Controller } from "../../types/Controller";
-import { SignInInput } from "../../types/User";
 import { SignInUseCase } from "../../useCases/user/SignInUseCase";
 
-export class SignInController
-  implements Controller<{ Body: { email: string; password: string } }>
-{
+export class SignInController implements Controller<{ Body: SignInInput }> {
   constructor(private readonly signInUseCase: SignInUseCase) {}
 
   public async handle(request: FastifyRequest<{ Body: SignInInput }>) {
@@ -29,8 +27,7 @@ export class SignInController
       return {
         statusCode: 500,
         body: {
-          error:
-            error instanceof Error ? error.message : "Internal server error",
+          error,
         },
       };
     }
