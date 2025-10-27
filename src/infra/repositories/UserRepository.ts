@@ -1,12 +1,20 @@
 import { FilterQuery } from "mongoose";
 import { SignUpInput } from "../../main/schemas/signUpSchema";
-import { UserDocument, UserModel, UserModelType } from "../models/User";
+import { UserDocument, UserModel, UserModelType, UserRole } from "../models/User";
+
+type UpdateUserData = Partial<SignUpInput> & {
+  roles?: UserRole[];
+};
 
 export class UserRepository {
   constructor(private readonly userModel: UserModelType = UserModel) {}
 
   public async findOne(filter: FilterQuery<UserDocument>) {
     return this.userModel.findOne(filter).lean({ virtuals: true }).exec();
+  }
+
+  public async findById(id: string) {
+    return this.userModel.findById(id).lean({ virtuals: true }).exec();
   }
 
   public async findOneWithPassword(filter: FilterQuery<UserDocument>) {
@@ -31,7 +39,7 @@ export class UserRepository {
     return { id };
   }
 
-  public async updateUser(id: string, updateData: Partial<SignUpInput>) {
+  public async updateUser(id: string, updateData: UpdateUserData) {
     const user = await this.userModel
       .findOneAndUpdate({ _id: id }, updateData, { new: true })
       .lean({ virtuals: true })
