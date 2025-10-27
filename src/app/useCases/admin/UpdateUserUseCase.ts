@@ -13,12 +13,13 @@ export class UpdateUserUseCase {
       throw new UserNotFound();
     }
 
-    // Se a senha foi fornecida, hash ela antes de atualizar
-    if (updateData.password) {
-      updateData.password = await hash(updateData.password);
+    const dataToUpdate = { ...updateData };
+
+    if (dataToUpdate.password) {
+      dataToUpdate.password = await hash(dataToUpdate.password);
     }
 
-    const result = await this.userRepository.updateUser(userId, updateData);
+    const result = await this.userRepository.updateUser(userId, dataToUpdate);
 
     if (!result.user) {
       throw new UserNotFound();
