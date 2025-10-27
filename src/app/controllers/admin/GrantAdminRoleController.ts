@@ -29,7 +29,6 @@ export class GrantAdminRoleController
         },
       };
     } catch (error) {
-      console.log(error);
 
       if (error instanceof UserNotFound) {
         return {

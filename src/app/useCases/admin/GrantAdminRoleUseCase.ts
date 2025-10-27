@@ -17,11 +17,15 @@ export class GrantAdminRoleUseCase {
       throw new UserAlreadyAdmin();
     }
 
-    user.roles.push(UserRole.ADMIN);
+    const updatedRoles = [...user.roles, UserRole.ADMIN];
 
     const updatedUser = await this.userRepository.updateUser(userId, {
-      roles: user.roles,
+      roles: updatedRoles,
     });
+
+    if (!updatedUser.user) {
+      throw new UserNotFound();
+    }
 
     return updatedUser;
   }
