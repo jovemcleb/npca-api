@@ -24,7 +24,7 @@ export class CreateAdminController
         roles,
       });
 
-      return { statusCode: 201, body: { admin } };
+      return { statusCode: 201, body: admin };
     } catch (error) {
       if (error instanceof AccountAlreadyExists) {
         return {

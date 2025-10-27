@@ -1,8 +1,9 @@
+import { hash } from "argon2";
 import { UserRole } from "../../../infra/models/User";
 import { UserRepository } from "../../../infra/repositories/UserRepository";
+import { CreateAdminInput } from "../../../main/schemas/createAdminSchema";
 import { AccountAlreadyExists } from "../../errors/AccountAlreadyExists";
 import { InvalidRoles } from "../../errors/InvalidRoles";
-import { CreateAdminInput } from "../../types/Admin";
 
 export class CreateAdminUseCase {
   constructor(private userRepository: UserRepository) {}
@@ -20,7 +21,12 @@ export class CreateAdminUseCase {
       throw new InvalidRoles();
     }
 
-    const { id } = await this.userRepository.createUser(adminData);
+    const hashedPassword = await hash(adminData.password);
+
+    const { id } = await this.userRepository.createUser({
+      ...adminData,
+      password: hashedPassword,
+    });
 
     return { id };
   }
